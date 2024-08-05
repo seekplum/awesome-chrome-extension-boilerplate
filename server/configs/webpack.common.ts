@@ -18,8 +18,7 @@ function getCssLoaders(importLoaders: number) {
         {
             loader: 'css-loader',
             options: {
-                // disable css module by default
-                modules: false,
+                modules: true,
                 sourceMap: true,
                 importLoaders,
             },
@@ -93,7 +92,24 @@ const commonConfig: Configuration = {
             {
                 test: /\.(js|ts|tsx)$/,
                 loader: 'babel-loader',
-                options: { cacheDirectory: true },
+                options: {
+                    cacheDirectory: true,
+                    presets: ['@babel/preset-env'],
+                    plugins: [
+                        [
+                            '@babel/plugin-proposal-decorators',
+                            {
+                                legacy: true,
+                            },
+                        ],
+                        [
+                            '@babel/plugin-proposal-class-properties',
+                            {
+                                loose: true,
+                            },
+                        ],
+                    ],
+                },
                 exclude: /node_modules/,
             },
             {

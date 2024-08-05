@@ -1,16 +1,17 @@
 {
     "extends": [
-        "stylelint-config-standard",
-        "stylelint-config-prettier",
+        "stylelint-config-standard-scss",
+        "stylelint-config-prettier-scss",
         "stylelint-config-recess-order"
     ],
-    "plugins": ["stylelint-declaration-block-no-ignored-properties", "stylelint-scss"],
+    "plugins": ["stylelint-order"],
     "rules": {
         "comment-empty-line-before": null,
         "function-name-case": "lower",
         "no-invalid-double-slash-comments": null,
         "no-descending-specificity": null,
-        "declaration-empty-line-before": null
+        "declaration-empty-line-before": null,
+        "selector-class-pattern": null
     },
     "overrides": [
         {
