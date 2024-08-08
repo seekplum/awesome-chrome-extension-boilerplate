@@ -1,9 +1,3 @@
-import { onMessage } from 'webext-bridge';
-
-onMessage('hello-from-content-script', (msg) => {
-    console.log(msg);
-});
-
 chrome.runtime.onMessage.addListener((message) => {
     console.log('chrome.runtime.onMessage:', message);
     if (message.message === 'popup.advanced') {
@@ -15,7 +9,11 @@ chrome.runtime.onMessage.addListener((message) => {
         } else {
             chrome.runtime.openOptionsPage();
         }
+    } else if (message.message === 'hello-from-content-script') {
+        console.log('hello:', message.description);
     }
 });
 
 console.log('This is background page!');
+
+export default undefined;
