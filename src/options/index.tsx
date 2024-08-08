@@ -6,7 +6,10 @@ import App from './App';
 import './App.scss';
 
 const container = document.querySelector('#root');
-const root = createRoot(container!);
+if (!container) {
+    throw new Error('options root is empty!!!');
+}
+const root = createRoot(container);
 root.render(
     <HashRouter>
         <App />
