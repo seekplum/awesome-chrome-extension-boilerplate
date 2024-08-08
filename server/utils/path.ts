@@ -7,7 +7,7 @@ export function resolveProject(...args: string[]) {
 }
 
 export function resolveExtension(...args: string[]) {
-    return resolveProject('extension', ...args);
+    return resolveProject('extension/awesome-chrome-extension-boilerplate', ...args);
 }
 
 export function resolvePublic(...args: string[]) {
