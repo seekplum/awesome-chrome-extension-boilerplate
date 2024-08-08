@@ -16,7 +16,7 @@ const manifest: Manifest.WebExtensionManifest = {
     web_accessible_resources: [
         {
             matches: ['<all_urls>'],
-            resources: ['icons/*', 'images/*', 'fonts/*'],
+            resources: ['icons/*', 'images/*', 'fonts/*', 'js/injected.js'],
         },
     ],
     background: {
@@ -29,6 +29,15 @@ const manifest: Manifest.WebExtensionManifest = {
             js: ['js/all.js', ...(__DEV__ ? [] : ['js/all.js']), 'js/injected.js'],
         },
     ],
+    commands: {
+        'Ctrl+B': {
+            suggested_key: {
+                default: 'Ctrl+B',
+                mac: 'Command+B',
+            },
+            description: 'Ctrl+B',
+        },
+    },
     action: {
         default_popup: 'popup.html',
         default_icon: {
