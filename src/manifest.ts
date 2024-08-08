@@ -26,7 +26,7 @@ const manifest: Manifest.WebExtensionManifest = {
         {
             matches: ['https://github.com/*'],
             css: ['css/all.css'],
-            js: ['js/all.js', ...(__DEV__ ? [] : ['js/all.js'])],
+            js: ['js/all.js', ...(__DEV__ ? [] : ['js/all.js']), 'js/injected.js'],
         },
     ],
     action: {
