@@ -1,7 +1,8 @@
 import { EventNames, MessageModules } from '@/constants';
 import type { ContentMessageData, InjectionMessageData } from '@/utils';
+import * as printer from '@/utils/printer';
 
-console.log('injected chrome extension data0');
+printer.consoleLog('injected chrome extension data0');
 
 function sendMessageToContent(eventName: EventNames, data: any): void {
     window.postMessage(
@@ -73,14 +74,14 @@ function sendMessageToContent(eventName: EventNames, data: any): void {
                     requestHeaders: this._requestHeaders,
                     response: this.responseText,
                 };
-                console.log('injected chrome extension data1:', data);
+                printer.consoleLog('injected chrome extension data1:', data);
                 sendMessageToContent(EventNames.XHR_RESPONSE, {
                     module: MessageModules.CONTENT,
                     data,
                 } as ContentMessageData);
             } catch (error) {
-                console.log('Error in responseType try catch');
-                console.log(error);
+                printer.consoleLog('Error in responseType try catch');
+                printer.consoleLog(error);
             }
         });
 
@@ -107,7 +108,7 @@ window.fetch = function (url, options) {
             url,
             response: res,
         };
-        console.log('injected chrome extension data2:', data);
+        printer.consoleLog('injected chrome extension data2:', data);
     });
     return fch;
 };
