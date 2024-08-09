@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 
-import { CRX_NAME, MessageModules } from '@/constants';
-import type { ContentMessageData, InjectionMessageData } from '@/utils';
+import { MessageModules } from '@/constants';
+import type { ContentMessageData } from '@/utils';
 import * as printer from '@/utils/printer';
 
 import App from './App';
 
-import './style.scss';
+import './index.scss';
 
 printer.consoleLog(`Current page's url must be prefixed with https://github.com`);
 
@@ -20,8 +20,6 @@ sendMessageToBackground({
     },
 } as ContentMessageData);
 
-// 注入自定义JS
-injectCustomJs();
 const container = document.createElement('div');
 document.body.append(container);
 const root = createRoot(container);
@@ -30,17 +28,6 @@ root.render(
         <App />
     </HashRouter>,
 );
-
-function injectCustomJs() {
-    printer.consoleLog('inject custom js');
-    const s = document.createElement('script');
-    s.src = chrome.runtime.getURL('js/injected.js');
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
-    s.onload = function () {
-        s.remove();
-    };
-    document.body.append(s);
-}
 
 // 接收来自后台的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -61,22 +48,3 @@ function sendMessageToBackground(message: ContentMessageData) {
         printer.consoleLog('收到来自后台的回复:', response);
     });
 }
-
-window.addEventListener(
-    'message',
-    (event: MessageEvent<InjectionMessageData>): void => {
-        if (event.origin !== location.origin) {
-            return;
-        }
-
-        if (event.data.origin !== CRX_NAME) {
-            return;
-        }
-
-        if (event.data.module !== MessageModules.INJECT) {
-            return;
-        }
-        printer.consoleLog('收到消息:', event);
-    },
-    false,
-);

@@ -1,6 +1,9 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { defaultExtensionConfig, Extension } from '@/utils';
+import { CRX_NAME, MessageModules } from '@/constants';
+import type { ContentMessageData, InjectionMessageData } from '@/utils';
+import { Extension } from '@/utils';
+import * as printer from '@/utils/printer';
 
 class AppVM {
     constructor() {
@@ -10,6 +13,8 @@ class AppVM {
 
     @action
     init = () => {
+        window.addEventListener('message', this.handleMessage);
+
         this.fetchConfig();
     };
 
@@ -23,7 +28,25 @@ class AppVM {
     fetchConfig = async (): Promise<void> => {
         const config = await Extension.getConfig();
         this.initialized = true;
-        this.isCollapsed = config.isCollapsed || defaultExtensionConfig.isCollapsed;
+        this.isCollapsed = config.isCollapsed;
+    };
+
+    @action
+    handleMessage = async (
+        event: MessageEvent<InjectionMessageData<ContentMessageData>>,
+    ): Promise<void> => {
+        if (event.origin !== location.origin) {
+            return;
+        }
+
+        if (event.data.origin !== CRX_NAME) {
+            return;
+        }
+
+        if (event.data.module !== MessageModules.INJECT) {
+            return;
+        }
+        printer.consoleLog('收到消息:', event);
     };
 }
 
