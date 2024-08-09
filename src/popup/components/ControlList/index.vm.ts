@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { Extension } from '@/utils';
+import { MessageModules } from '@/constants';
+import { type ContentMessageData, Extension } from '@/utils';
 
 class ControlListVM {
     constructor() {
@@ -29,7 +30,12 @@ class ControlListVM {
 
     @action
     handleAdvanced = () => {
-        chrome.runtime.sendMessage({ message: 'popup.advanced' });
+        chrome.runtime.sendMessage({
+            module: MessageModules.POPUP,
+            data: {
+                cmd: 'popup.advanced',
+            },
+        } as ContentMessageData);
     };
 
     @action

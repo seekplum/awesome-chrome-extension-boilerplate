@@ -15,7 +15,7 @@ const manifest: Manifest.WebExtensionManifest = {
     },
     web_accessible_resources: [
         {
-            matches: ['<all_urls>'],
+            matches: ['https://github.com/*'],
             resources: ['icons/*', 'images/*', 'fonts/*', 'js/injected.js'],
         },
     ],
@@ -24,9 +24,10 @@ const manifest: Manifest.WebExtensionManifest = {
     },
     content_scripts: [
         {
-            matches: ['https://github.com/*'],
+            matches: ['https://github.com/*/*/issues'],
             css: ['css/all.css'],
-            js: ['js/all.js', ...(__DEV__ ? [] : ['js/all.js']), 'js/injected.js'],
+            run_at: 'document_start',
+            js: ['js/all.js', 'js/injected.js'],
         },
     ],
     commands: {
@@ -47,6 +48,7 @@ const manifest: Manifest.WebExtensionManifest = {
             '128': 'icons/extension-icon-x128.png',
         },
     },
+    host_permissions: ['https://*'],
     options_ui: {
         page: 'options.html',
         open_in_tab: true,
