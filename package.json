@@ -30,6 +30,7 @@
         "lint": "pnpm lint:es && pnpm lint:style",
         "lint:es": "eslint -c .eslintrc.js --ext .ts,.tsx  ./src/**/*.tsx ./{src,server}/**/*.ts",
         "lint:style": "stylelint --config .stylelintrc.json src/**/*.{css,less,scss}",
+        "format": "prettier --write ./src/**/*.tsx ./{src,server}/**/*.ts ./src/**/*.{css,less,scss}",
         "reinstall": "rimraf -rf ./node_modules && pnpm",
         "prepare": "husky install"
     },
