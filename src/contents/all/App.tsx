@@ -1,3 +1,4 @@
+import { LeftCircleTwoTone, RightCircleTwoTone } from '@ant-design/icons';
 import { Flex, Spin, Typography } from 'antd';
 import { Observer } from 'mobx-react-lite';
 import * as React from 'react';
@@ -9,11 +10,24 @@ const App: React.FC = () => {
     const vm = React.useMemo(() => new AppVM(), []);
     return (
         <Observer>
-            {() =>
-                vm.isCollapsed ? null : (
-                    <Flex id={`${styles.plumChromeExtensionBox}`} vertical gap={4} align="center">
-                        {vm.initialized ? (
-                            <>
+            {() => (
+                <Flex id={`${styles.plumChromeExtensionBox}`} gap={4}>
+                    <Flex align="baseline">
+                        {vm.config?.isCollapsed ? (
+                            <RightCircleTwoTone
+                                onClick={vm.toggleCollapsed}
+                                style={{ fontSize: 30, cursor: 'pointer' }}
+                            />
+                        ) : (
+                            <LeftCircleTwoTone
+                                onClick={vm.toggleCollapsed}
+                                style={{ fontSize: 30, cursor: 'pointer' }}
+                            />
+                        )}
+                    </Flex>
+                    {vm.config ? (
+                        vm.config.isCollapsed && (
+                            <Flex vertical>
                                 <Flex gap={8} style={{ margin: '0 16px' }}>
                                     <Typography.Title style={{ fontSize: 18 }}>
                                         插件页面内容
@@ -24,13 +38,13 @@ const App: React.FC = () => {
                                     <Typography.Text>正文内容2</Typography.Text>
                                     <Typography.Text>正文内容3</Typography.Text>
                                 </Flex>
-                            </>
-                        ) : (
-                            <Spin />
-                        )}
-                    </Flex>
-                )
-            }
+                            </Flex>
+                        )
+                    ) : (
+                        <Spin />
+                    )}
+                </Flex>
+            )}
         </Observer>
     );
 };

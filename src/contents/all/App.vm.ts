@@ -1,6 +1,7 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 
-import { CRX_NAME, MessageModules } from '@/constants';
+import { CRX_NAME, EventNames, MessageModules } from '@/constants';
+import type { IExtensionConfig } from '@/typings';
 import type { ContentMessageData, InjectionMessageData } from '@/utils';
 import { Extension } from '@/utils';
 import * as printer from '@/utils/printer';
@@ -14,39 +15,55 @@ class AppVM {
     @action
     init = () => {
         window.addEventListener('message', this.handleMessage);
-
         this.fetchConfig();
     };
 
     @observable
-    initialized = false;
-
-    @observable
-    isCollapsed = false;
+    config: IExtensionConfig | null = null;
 
     @action
     fetchConfig = async (): Promise<void> => {
         const config = await Extension.getConfig();
-        this.initialized = true;
-        this.isCollapsed = config.isCollapsed;
+        runInAction(() => {
+            this.config = config;
+        });
     };
 
     @action
-    handleMessage = async (
-        event: MessageEvent<InjectionMessageData<ContentMessageData>>,
-    ): Promise<void> => {
+    toggleCollapsed = async () => {
+        if (!this.config) {
+            return;
+        }
+
+        this.config.isCollapsed = !this.config.isCollapsed;
+        await Extension.setConfig({
+            isCollapsed: this.config.isCollapsed,
+        });
+    };
+
+    @action
+    handleMessage = async (event: MessageEvent<InjectionMessageData<ContentMessageData>>) => {
         if (event.origin !== location.origin) {
             return;
         }
 
-        if (event.data.origin !== CRX_NAME) {
+        const { data: eventData } = event;
+
+        if (eventData.origin !== CRX_NAME) {
             return;
         }
 
-        if (event.data.module !== MessageModules.INJECT) {
+        if (eventData.module !== MessageModules.INJECT) {
             return;
         }
-        printer.consoleLog('收到消息:', event);
+
+        if (![EventNames.XHR_RESPONSE, EventNames.FETCH_RESPONSE].includes(eventData.eventName)) {
+            return;
+        }
+        const { data: contentData } = eventData;
+        const { data } = contentData;
+
+        printer.consoleLog('收到消息:', data);
     };
 }
 
