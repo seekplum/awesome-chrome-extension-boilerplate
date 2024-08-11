@@ -28,6 +28,17 @@ class OptionsSettingsVM {
     };
 
     @action
+    onChangeFields = (field: string, value: any): void => {
+        if (!this.config) {
+            return;
+        }
+        this.config = {
+            ...this.config,
+            [field]: value,
+        };
+    };
+
+    @action
     handleSubmit = (values: Record<string, any>): void => {
         if (!this.config) {
             return;

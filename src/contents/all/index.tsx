@@ -21,7 +21,7 @@ sendMessageToBackground({
 } as ContentMessageData);
 
 const container = document.createElement('div');
-document.body.append(container);
+document.body?.appendChild(container) || document.documentElement?.append(container);
 const root = createRoot(container);
 root.render(
     <HashRouter>

@@ -28,9 +28,9 @@ const App: React.FC = () => {
                             <Typography.Text>{VERSION}</Typography.Text>
                         </Form.Item>
                         <Form.Item
-                            label="是否折叠"
-                            name="isCollapsed"
-                            initialValue={!vm.config.isCollapsed}
+                            label="默认显示插件"
+                            name="isExpanded"
+                            initialValue={vm.config.isExpanded}
                             valuePropName="checked"
                         >
                             <Switch />

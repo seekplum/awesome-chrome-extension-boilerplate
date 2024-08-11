@@ -16,7 +16,15 @@ class AppVM {
     init = () => {
         window.addEventListener('message', this.handleMessage);
         this.fetchConfig();
+        setTimeout(() => {
+            runInAction(() => {
+                this.initialized = true;
+            });
+        }, 5 * 1000);
     };
+
+    @observable
+    initialized = false;
 
     @observable
     config: IExtensionConfig | null = null;
@@ -35,9 +43,9 @@ class AppVM {
             return;
         }
 
-        this.config.isCollapsed = !this.config.isCollapsed;
+        this.config.isExpanded = !this.config.isExpanded;
         await Extension.setConfig({
-            isCollapsed: this.config.isCollapsed,
+            isExpanded: this.config.isExpanded,
         });
     };
 

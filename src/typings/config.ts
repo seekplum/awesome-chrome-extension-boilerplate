@@ -1,4 +1,3 @@
 export interface IExtensionConfig {
-    version: string;
-    isCollapsed: boolean;
+    isExpanded: boolean;
 }

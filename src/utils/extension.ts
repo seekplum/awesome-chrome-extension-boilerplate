@@ -8,7 +8,7 @@ import pkg from '../../package.json';
 export const VERSION = pkg.version;
 
 export const defaultExtensionConfig = {
-    isCollapsed: false,
+    isExpanded: true,
 } as IExtensionConfig;
 
 export class Extension {

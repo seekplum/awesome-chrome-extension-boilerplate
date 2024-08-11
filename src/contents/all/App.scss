@@ -6,8 +6,12 @@
     right: 0;
     z-index: 999999999;
     max-width: 800px;
-    overflow: auto;
-    background: white;
-    border: 1px solid color.$static-gray-5;
-    box-shadow: 0 2px 2px 0 #0000000f;
+
+    .codeBox {
+        padding: 12px;
+        overflow: hidden;
+        background: white;
+        border: 1px solid color.$static-gray-5;
+        box-shadow: 0 0 2px 2px #0000000f;
+    }
 }
