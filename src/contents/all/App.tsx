@@ -7,8 +7,16 @@ import styles from './App.scss';
 import AppVM from './App.vm';
 
 const App: React.FC = () => {
+    const [tipsHeight, setTipsHeight] = React.useState(105);
+
     const vm = React.useMemo(() => new AppVM(), []);
     const elemRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (elemRef.current) {
+            setTipsHeight(elemRef.current.clientHeight);
+        }
+    }, [elemRef]);
 
     return (
         <Observer>
@@ -30,8 +38,13 @@ const App: React.FC = () => {
                     {vm.config ? (
                         vm.config.isExpanded && (
                             <Flex vertical className={styles.codeBox}>
-                                <div ref={elemRef}>
-                                    <Flex gap={8} style={{ margin: '0 16px' }}>
+                                <div ref={elemRef} style={{ marginBottom: 16 }}>
+                                    <Flex
+                                        gap={8}
+                                        style={{ margin: '0 16px' }}
+                                        justify="center"
+                                        align="center"
+                                    >
                                         <Typography.Title style={{ fontSize: 18 }}>
                                             插件页面内容
                                         </Typography.Title>
@@ -42,6 +55,13 @@ const App: React.FC = () => {
                                         <Typography.Text>正文内容3</Typography.Text>
                                     </Flex>
                                 </div>
+                                <Flex vertical gap={4}>
+                                    <Flex gap={12} style={{ height: tipsHeight }}>
+                                        <Typography.Text>
+                                            扩展模块..., 上方内容高度: {tipsHeight}px
+                                        </Typography.Text>
+                                    </Flex>
+                                </Flex>
                             </Flex>
                         )
                     ) : (

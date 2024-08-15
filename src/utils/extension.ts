@@ -14,17 +14,19 @@ export const defaultExtensionConfig = {
 export class Extension {
     static getConfig = async (): Promise<IExtensionConfig> => {
         const data = await chrome.storage.local.get(EXTENSION_CONFIG_NAME);
+        if (!data || !data[EXTENSION_CONFIG_NAME]) {
+            return defaultExtensionConfig;
+        }
         return {
             ...defaultExtensionConfig,
-            ...data.extensionConfig,
+            ...data[EXTENSION_CONFIG_NAME],
         };
     };
 
-    static setConfig = async (record: Partial<Record<string, any>>) => {
+    static setConfig = async (record: Partial<IExtensionConfig>) => {
         const config = await Extension.getConfig();
-
         await chrome.storage.local.set({
-            extensionConfig: {
+            [EXTENSION_CONFIG_NAME]: {
                 ...config,
                 ...record,
             },
@@ -41,10 +43,6 @@ export class Extension {
         makeObservable(this);
         this.init();
     }
-
-    setConfig = (record: Partial<Record<string, any>>) => {
-        return Extension.setConfig(record);
-    };
 
     @action
     private init = async () => {

@@ -19,3 +19,7 @@ export enum EventNames {
 export enum Platform {
     GITHUB = 'github',
 }
+
+export const PlatformNames = {
+    [Platform.GITHUB]: 'Github',
+};

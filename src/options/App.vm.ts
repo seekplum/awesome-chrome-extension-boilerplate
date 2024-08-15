@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 
 import type { IExtensionConfig } from '@/typings';
 import { Extension } from '@/utils';
@@ -23,27 +23,27 @@ class OptionsSettingsVM {
     @action
     fetchConfig = async (): Promise<void> => {
         const config = await Extension.getConfig();
-        this.initialized = true;
-        this.config = config;
+        runInAction(() => {
+            this.initialized = true;
+            this.config = config;
+        });
     };
 
     @action
-    onChangeFields = (field: string, value: any): void => {
+    saveConfig = () => {
         if (!this.config) {
             return;
         }
-        this.config = {
-            ...this.config,
-            [field]: value,
-        };
+        Extension.setConfig(this.config);
     };
 
     @action
     handleSubmit = (values: Record<string, any>): void => {
-        if (!this.config) {
+        if (!this.config || !values || Object.keys(values).length === 0) {
             return;
         }
-        Extension.setConfig({ ...this.config, ...values });
+        this.config = { ...this.config, ...values };
+        this.saveConfig();
     };
 }
 
